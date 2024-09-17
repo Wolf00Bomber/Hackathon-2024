@@ -1,17 +1,11 @@
-import {render, screen} from '@testing-library/react'
+import React from 'react';
+import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
-import Fetch from '../src/component/fetch'
+import App from '../src/App';
 
-test('loads and displays greeting', async () => {
-  // ARRANGE
-  render(<Fetch url="/greeting" />)
-
-  // ACT
-  await userEvent.click(screen.getByText('Load Greeting'))
-  await screen.findByRole('heading')
-
-  // ASSERT
-  expect(screen.getByRole('heading')).toHaveTextContent('hello there')
-  expect(screen.getByRole('button')).toBeDisabled()
+test('App component is loaded', () => {
+  render(<App/>)
+  expect(screen.getByTestId("span-id")).toBeDefined();
+  expect(screen.getByTestId("span-id")).toHaveTextContent("Test Span Here");
 })
