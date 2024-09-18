@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Dashboard from "./dashboard";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,19 @@ const Login = () => {
     setPassword((prev) => event?.target?.value);
   };
 
-  const onLogin = () => {};
+  const [status, setStatus] = useState(false);
+
+  const validateCredentials = () => {
+    if (email === "test-email@email.com" && password === "test-password-value") {
+      return true;
+    }
+    return false;
+  }
+
+  const onLogin = () => {
+    const isValid = validateCredentials();
+    setStatus(prev => isValid);
+  };
 
   return (
     <div>
@@ -31,6 +44,13 @@ const Login = () => {
       <button disabled={!email || !password} onClick={onLogin}>
         Login
       </button>
+
+      <label data-testid="login-status-id" value={status}></label>
+
+      {
+        status &&
+        <Dashboard />
+      }
     </div>
   );
 };

@@ -58,13 +58,87 @@ test("Login button enabled", async () => {
   expect(loginBtn.disabled).toBe(false);
 });
 
+test("validate credentials success", () => {
+  triggerContinueLoginBtnClick();
+  const emailCtrl = screen.getByTestId("email-id");
+  const passwordCtrl = screen.getByTestId("password-id");
+
+  const mockObj = { email: "test-email@email.com", password: "test-password-value" }
+  fireEvent.change(emailCtrl, {target: {value: mockObj.email}});
+  fireEvent.change(passwordCtrl, {target: {value: mockObj.password}});
+
+  const loginBtn = screen.getByText("Login");
+
+  fireEvent.click(loginBtn);
+
+  const status = screen.getByTestId("login-status-id");
+  expect(status.getAttribute("value")).toBe("true");
+});
+
+test("Login failed due to invalid credentials", () => {
+  triggerContinueLoginBtnClick();
+  const emailCtrl = screen.getByTestId("email-id");
+  const passwordCtrl = screen.getByTestId("password-id");
+
+  const mockObj = { email: "test-email123@email.com", password: "test-password-value" }
+  fireEvent.change(emailCtrl, {target: {value: mockObj.email}});
+  fireEvent.change(passwordCtrl, {target: {value: mockObj.password}});
+
+  const loginBtn = screen.getByText("Login");
+
+  fireEvent.click(loginBtn);
+
+  const status = screen.getByTestId("login-status-id");
+  expect(status.getAttribute("value")).toBe("false");
+})
+
+test("Dashoboard should not be loaded when invalid credentials are provided", () => {
+  triggerContinueLoginBtnClick();
+  const emailCtrl = screen.getByTestId("email-id");
+  const passwordCtrl = screen.getByTestId("password-id");
+
+  const mockObj = { email: "test-email123@email.com", password: "test-password-value" }
+  fireEvent.change(emailCtrl, {target: {value: mockObj.email}});
+  fireEvent.change(passwordCtrl, {target: {value: mockObj.password}});
+
+  const loginBtn = screen.getByText("Login");
+
+  fireEvent.click(loginBtn);
+  
+  const dashboardComponent = screen.queryByTestId("dashboard-id");
+
+  expect(dashboardComponent).toBe(null);
+
+})
+
+
+test("Dashoboard loaded when valid credentials are provided", () => {
+  triggerContinueLoginBtnClick();
+  const emailCtrl = screen.getByTestId("email-id");
+  const passwordCtrl = screen.getByTestId("password-id");
+
+  const mockObj = { email: "test-email@email.com", password: "test-password-value" }
+  fireEvent.change(emailCtrl, {target: {value: mockObj.email}});
+  fireEvent.change(passwordCtrl, {target: {value: mockObj.password}});
+
+  const loginBtn = screen.getByText("Login");
+
+  fireEvent.click(loginBtn);
+  
+  const dashboardComponent = screen.queryByTestId("dashboard-id");
+
+  expect(dashboardComponent).not.toBe(null);
+
+  const tdItems = screen.getAllByRole('cell');
+  expect(tdItems.length).toBe(11);
+
+})
+
 const triggerContinueLoginBtnClick = () => {
   renderApp();
 
   const continueloginButton = screen.getByText("Continue with Login");
   fireEvent.click(continueloginButton);
-
-  
 }
 
 const renderApp = () => {
