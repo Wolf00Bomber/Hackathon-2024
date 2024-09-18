@@ -182,7 +182,7 @@ test("Customer should see their product details on Dashboard [Requirements: Prop
   // show the Product Purchase Details like Order Date, Order ID, Dispatched Address, Seller Details, Expected Delivery
   const productOrderIDHTMLRef = screen.queryByTestId("product-order-id");
   expect(productOrderIDHTMLRef).not.toBe(null);
-  expect(productOrderIDHTMLRef.value).toBe(mockProductOrderData.orderId);
+  expect(productOrderIDHTMLRef.textContent).toBe(mockProductOrderData.orderId);
 })
 
 // Utilites

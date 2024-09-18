@@ -32,7 +32,7 @@ const Dashboard = () => {
                 </tbody>
             </table>
             {
-                selectedProduct && selectedProduct != "" && <ProductPage product={selectedProduct}/>
+                selectedProduct && selectedProduct != "" && <ProductPage productName={selectedProduct}/>
             }
         </div>
 
