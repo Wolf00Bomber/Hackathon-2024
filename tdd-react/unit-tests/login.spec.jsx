@@ -37,7 +37,7 @@ test("Login button disabled", () => {
   expect(loginBtn.disabled).toBe(true)
 });
 
-test("Login button enabled", async () => {
+test("Login button enabled [Requirements: We add Email & Password, Then Login Btn is enabled] ", async () => {
   triggerContinueLoginBtnClick();
 
   const emailCtrl = screen.getByTestId("email-id");
@@ -58,7 +58,7 @@ test("Login button enabled", async () => {
   expect(loginBtn.disabled).toBe(false);
 });
 
-test("validate credentials success", () => {
+test("validate credentials success [Requirements: We add Valid Email & password]", () => {
   triggerContinueLoginBtnClick();
   const emailCtrl = screen.getByTestId("email-id");
   const passwordCtrl = screen.getByTestId("password-id");
@@ -75,7 +75,7 @@ test("validate credentials success", () => {
   expect(status.getAttribute("value")).toBe("true");
 });
 
-test("Login failed due to invalid credentials", () => {
+test("Login failed due to invalid credentials [Failed Test due to Invalid Email & Password]", () => {
   triggerContinueLoginBtnClick();
   const emailCtrl = screen.getByTestId("email-id");
   const passwordCtrl = screen.getByTestId("password-id");
@@ -92,7 +92,7 @@ test("Login failed due to invalid credentials", () => {
   expect(status.getAttribute("value")).toBe("false");
 })
 
-test("Dashoboard should not be loaded when invalid credentials are provided", () => {
+test("Dashboard should not be loaded when invalid credentials are provided [No Dashboard UI due to invalid Email & Password]", () => {
   triggerContinueLoginBtnClick();
   const emailCtrl = screen.getByTestId("email-id");
   const passwordCtrl = screen.getByTestId("password-id");
@@ -111,8 +111,7 @@ test("Dashoboard should not be loaded when invalid credentials are provided", ()
 
 })
 
-
-test("Dashoboard loaded when valid credentials are provided", () => {
+test("Dashboard loaded when valid credentials are provided [Requirements: Valid Email & Password. Success UI Flow to Dashboard]", () => {
   triggerContinueLoginBtnClick();
   const emailCtrl = screen.getByTestId("email-id");
   const passwordCtrl = screen.getByTestId("password-id");
@@ -131,11 +130,14 @@ test("Dashoboard loaded when valid credentials are provided", () => {
 
   const mockDashboardData = DashboardData;
 
-  const tdItems = screen.getAllByRole('cell');
-  expect(tdItems.length).toBe(mockDashboardData.length);
+  const tdItems = screen.getAllByRole('row');
+  expect(tdItems.length).toBe(mockDashboardData.length + 1);
 
 })
 
+
+
+// Utilites
 const triggerContinueLoginBtnClick = () => {
   renderApp();
 
