@@ -1,49 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import { DashboardData } from "../shared/mock-data";
+import ProductPage from "./ProductPage";
 
 const Dashboard = () => {
+    const [selectedProduct, setSelectedProduct] = useState("");
     const data = DashboardData;
+    const onProductClick = function(e) {
+        console.log(e.target.innerText);
+        setSelectedProduct(e.target.innerText);
+    }
+
     return (
         <div data-testid="dashboard-id">
-            <h2>User List</h2>
+            <h2>Orders List</h2>
             <table border="1">
                 <thead>
                 <tr>
-                    <th>User Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
+                    <th>Product Name</th>
+                    <th>Product Cost($)</th>
+                    <th>Product Quantity(KG)</th>
                 </tr>
                 </thead>
                 <tbody>
-                {data.map((user, index) => (
+                {data.map((product, index) => (
                     <tr key={index}>
-                    <td>{user.userName}</td>
-                    <td>{user.phoneNo}</td>
-                    <td>{user.email}</td>
+                    <td onClick={onProductClick}>{product.productName}</td>
+                    <td>{product.productCost}</td>
+                    <td>{product.productQuantity}</td>
                     </tr>
                 ))}
                 </tbody>
             </table>
+            {
+                selectedProduct && selectedProduct != "" && <ProductPage product={selectedProduct}/>
+            }
         </div>
 
-        // <div data-testid="dashboard-id">
-        //     <table>
-        //         <tr>
-        //             <th>User Name</th>
-        //             <th>Email</th>
-        //             <th>Contact</th>
-        //         </tr>
-        //         {
-        //         data.map(rec => {
-        //             return (
-        //                 <tr>
-        //                      <td key={rec.userId}>{rec.userName} - {rec.email} - {rec.phoneNo}</td>
-        //                 </tr>
-        //             )
-        //         })
-        //         }
-        //     </table>
-        // </div>
+        
     )
 }
 

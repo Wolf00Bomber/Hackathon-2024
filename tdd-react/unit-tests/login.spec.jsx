@@ -3,6 +3,7 @@ import {fireEvent, render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom'
 import App from '../src/App';
 import { DashboardData } from '../src/shared/mock-data';
+import { ProductData } from '../src/shared/products';
 
 test("App component is loaded", () => {
   renderApp();
@@ -135,7 +136,54 @@ test("Dashboard loaded when valid credentials are provided [Requirements: Valid 
 
 })
 
+test("Customer should see their product details on Dashboard [Requirements: Proper Credentials]", () => {
+  triggerContinueLoginBtnClick();
+  const emailCtrl = screen.getByTestId("email-id");
+  const passwordCtrl = screen.getByTestId("password-id");
 
+  const mockObj = { email: "test-email@email.com", password: "test-password-value" }
+  fireEvent.change(emailCtrl, {target: {value: mockObj.email}});
+  fireEvent.change(passwordCtrl, {target: {value: mockObj.password}});
+
+  const loginBtn = screen.getByText("Login");
+
+  fireEvent.click(loginBtn);
+  
+  const dashboardComponent = screen.queryByTestId("dashboard-id");
+
+  expect(dashboardComponent).not.toBe(null);
+
+  const mockDashboardData = DashboardData;
+
+  const tdItems = screen.getAllByRole('row');
+  expect(tdItems.length).toBe(mockDashboardData.length + 1);
+
+  const mockProductName = DashboardData[0].productName;
+
+  const expectedItem = DashboardData.find(item => item.productName === mockProductName);
+  const actualItem = {
+    "productId": 1,
+    "productName": "Surf Excel",
+    "productCost": "100",
+    "productQuantity": "1"
+  };
+  expect(expectedItem.productName).toBe(actualItem.productName);
+  expect(expectedItem.productCost).toBe(actualItem.productCost);
+  expect(expectedItem.productQuantity).toBe(actualItem.productQuantity);
+  
+  const productNameButton = screen.getByText(expectedItem.productName);
+  fireEvent.click(productNameButton, {target: {innerText: mockProductName}});
+
+  const productComponent = screen.queryByTestId("product-id");
+  expect(productComponent).not.toBe(null);
+
+  const mockProductOrderData = ProductData.find(i => i.productName === mockProductName);
+
+  // show the Product Purchase Details like Order Date, Order ID, Dispatched Address, Seller Details, Expected Delivery
+  const productOrderIDHTMLRef = screen.queryByTestId("product-order-id");
+  expect(productOrderIDHTMLRef).not.toBe(null);
+  expect(productOrderIDHTMLRef.value).toBe(mockProductOrderData.orderId);
+})
 
 // Utilites
 const triggerContinueLoginBtnClick = () => {
