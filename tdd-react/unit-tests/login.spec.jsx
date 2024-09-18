@@ -1,8 +1,8 @@
 import React from 'react';
 import {fireEvent, render, screen} from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import App from '../src/App';
+import { DashboardData } from '../src/shared/mock-data';
 
 test("App component is loaded", () => {
   renderApp();
@@ -129,8 +129,10 @@ test("Dashoboard loaded when valid credentials are provided", () => {
 
   expect(dashboardComponent).not.toBe(null);
 
+  const mockDashboardData = DashboardData;
+
   const tdItems = screen.getAllByRole('cell');
-  expect(tdItems.length).toBe(11);
+  expect(tdItems.length).toBe(mockDashboardData.length);
 
 })
 
